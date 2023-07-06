@@ -1,0 +1,87 @@
+/*
+
+    1) Use module DS/DataDragAndDrop/DataDragAndDrop
+    2) Render an element Draggable, e.g.,
+        DnD.draggable(dragElements[i], {
+            data: JSON.stringify(myData),
+            start: function(){console.log("Start");},
+            stop: function(){console.log("Stop");}
+        });
+    3) Create a Droppable element, e.g.,
+        DnD.droppable(dropElements[i],{
+            drop: function(data){
+                var dataDnD = JSON.parse(data);
+                console.log(data);
+                console.log(dataDnD);
+            },
+            enter:function(){console.log("Enter");},
+            leave:function(){console.log("Leave");},
+            over:function(){console.log("Over");}
+        });
+
+*/
+
+//The displaydata function will create new children (div elements) in any DOM elements of class "ToDisplay" to display the input dataToDisplay.
+
+    function displayData(dataToDisplay){
+        var myElements = widget.body.getElementsByClassName("ToDisplay");//my DOM elements of class "ToDisplay"
+        const myDiv = document.createElement("div");    //proposed children of "ToDisplay"
+        const textnode = document.createTextNode(dataToDisplay);    //proposed children of the myDiv
+
+        myDiv.appendChild(textnode);
+        myElements[0].appendChild(myDiv);
+    }
+
+    /*Here we define the object representing our widget, including 2 user-defined methods: onLoad and makeDraggable.
+      makeDraggable makes use of the require js module loader, which helps manage multiple js codes at
+      once. This is part of the AMD (Asynchronous Module Definition) format, which is used in the
+      Universal Widget API which we are implementing here... More on this: [https://uwa.netvibes.com/docs/Uwa/html/static-AMD.html]*/
+    var MyWidget = {
+        onLoad: function() {console.log("loading...");},
+        makeDraggable: function() {
+            require(["DS/DataDragAndDrop/DataDragAndDrop"], function(DnD){  //We call the DataDragAndDrop.js module from Dassault Systemes (DS)
+                var myData = {                                              //and its output (DnD) is passed to the function we are defining here.
+                    "name": "rashid",
+                    "country": "france"
+                };  //myData is sample data which will be displayed when we drag the draggable element to the droppable element.
+
+                var dragElement = widget.body.getElementsByClassName("DragElement");
+                console.log("dragElement length: " + dragElement.length);
+
+                /*
+                  We now implement the jQuery UI interactions, draggable and droppable. Each have their own set of
+                  events we can exploit to accomplish our goals.
+                  [https://www.geeksforgeeks.org/jquery-ui-introduction/, https://api.jqueryui.com/category/interactions/]
+                */
+                for(var i=0; i<dragElement.length; i++){
+                    DnD.draggable(dragElement[i], {
+                        data: JSON.stringify(myData),   //converts myData to a string: https://www.w3schools.com/js/js_json_stringify.asp
+                        start: function(){console.log("start");},   //start event signals the start of a drag (initiated by click and hold)
+                        stop: function(){console.log("stop");}  //stop event initiated by click release
+                    });
+                }
+
+                //var dataToDisplay = "";
+                var dropElement = widget.body.getElementsByClassName("DropElement");
+                console.log("dropElement length: " + dropElement.length);
+
+                for(var i=0; i<dropElement.length; i++){
+                    DnD.droppable(dropElement[i], {
+                        drop: function (data) { //drop event initiates when we stop a drag over a droppable element
+                            var dataDnD = JSON.parse(data);
+                            console.log(data);
+                            console.log(dataDnD);
+                            displayData(data);
+                        },
+                        enter: function(){console.log("enter");},   //these are initiated by mouse-overs with a held click
+                        leave: function(){console.log("leave");},
+                        over: function(){console.log("over");}
+                    });
+                }
+            });//end of require
+        }   //end of makeDraggable method definition
+    };
+
+    //now we make use of our MyWidget object and activate its methods when the onLoad event occurs (whenever the widget loads)
+    widget.addEvent("onLoad", MyWidget.onLoad);
+    widget.addEvent("onLoad", MyWidget.makeDraggable);
