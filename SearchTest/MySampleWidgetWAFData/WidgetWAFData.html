@@ -51,9 +51,6 @@
 		}
 	</style>
 
-
-
-
 	<!-- <script type="text/javascript" src="scripts/Main.js"></script>-->
 	<script type="text/javascript">
 	function executeWidgetCode() {
@@ -108,7 +105,7 @@
                 var urlWAF = widget.getValue("urlREST");
                 var dataWAF = {
                    type: widget.getValue("typeObj"),
-                   selects: "attribute[*],current,name,revision"
+                   selects: "type,name,revision,state"//"attribute[*],current,name,revision"
                 };
                 var headerWAF = {
                    SecurityContext: widget.getValue("ctx")
@@ -129,7 +126,7 @@
 						}
 					},
 					onFailure: function(error) {
-						widget.body.innerHTML += "<p>Call Faillure</p>";
+						widget.body.innerHTML += "<p>Call Failure</p>";
 						widget.body.innerHTML += "<p>" + JSON.stringify(error) + "</p>";
 					}
                 });
