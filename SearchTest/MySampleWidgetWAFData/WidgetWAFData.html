@@ -61,7 +61,7 @@
             dataFull: [],
 
             displayData: function(arrData) {
-				console.log("displayData");
+				console.log("RASHID" + "displayData");
                 var tableHTML =
                     "<div style='height:100%;overflow:auto;'><table><thead><tr><th>Type</th><th>Name</th><th>Revision</th><th>State</th></tr></thead><tbody>";
 
@@ -85,19 +85,19 @@
             },
 
             onLoadWidget: function() {
-				console.log("on load");
+				console.log("RASHID" + "on load");
                 myWidget.callData();
                 myWidget.displayData(myWidget.dataFull);
             },
 
             onSearchWidget: function(searchQuery) {
-				console.log("on search");
+				console.log("RASHID" + "on search");
                 var arrResult = [];
                 for (var i = 0; i < myWidget.dataFull.length; i++) {
                     var objData = myWidget.dataFull[i];
                     
                     if (objData.name.indexOf(searchQuery) !== -1) {
-						console.log(objData.name);
+						console.log("RASHID" + objData.name);
                         arrResult.push(objData);
                     }
                 }
@@ -105,7 +105,7 @@
             },
 
             onResetSearchWidget: function() {
-				console.log("reset search");
+				console.log("RASHID" + "reset search");
                 myWidget.displayData(myWidget.dataFull);
             },
 
@@ -125,19 +125,19 @@
 					data: dataWAF,
 					type: "json",
 					onComplete: function(dataResp) {
-						console.log(dataResp.msg);
+						console.log("RASHID" + dataResp.msg);
 						if (dataResp.msg === "OK") {
-							console.log("ok");
+							console.log("RASHID" + "ok");
 							myWidget.dataFull = dataResp.data;
 							myWidget.displayData(myWidget.dataFull);
 						} else {
-							console.log("error in webservice response");
+							console.log("RASHID" + "error in webservice response");
 							widget.body.innerHTML += "<p>Error in WebService Response</p>";
 							widget.body.innerHTML += "<p>" + JSON.stringify(dataResp) + "</p>";
 						}
 					},
 					onFailure: function(error) {
-						console.log("call failure");
+						console.log("RASHID" + "call failure");
 						widget.body.innerHTML += "<p>Call Failure</p>";
 						widget.body.innerHTML += "<p>" + JSON.stringify(error) + "</p>";
 					}
