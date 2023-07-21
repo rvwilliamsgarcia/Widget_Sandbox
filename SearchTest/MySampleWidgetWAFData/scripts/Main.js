@@ -4,6 +4,7 @@ function executeWidgetCode() {
             dataFull: [],
 
             displayData: function(arrData) {
+				console.log("RASHID" + "displayData");
                 var tableHTML =
                     "<div style='height:100%;overflow:auto;'><table><thead><tr><th>Type</th><th>Name</th><th>Revision</th><th>State</th></tr></thead><tbody>";
 
@@ -27,15 +28,19 @@ function executeWidgetCode() {
             },
 
             onLoadWidget: function() {
+				console.log("RASHID" + "on load");
                 myWidget.callData();
                 myWidget.displayData(myWidget.dataFull);
             },
 
             onSearchWidget: function(searchQuery) {
+				console.log("RASHID" + "on search");
                 var arrResult = [];
                 for (var i = 0; i < myWidget.dataFull.length; i++) {
                     var objData = myWidget.dataFull[i];
+                    
                     if (objData.name.indexOf(searchQuery) !== -1) {
+						console.log("RASHID" + objData.name);
                         arrResult.push(objData);
                     }
                 }
@@ -43,6 +48,7 @@ function executeWidgetCode() {
             },
 
             onResetSearchWidget: function() {
+				console.log("RASHID" + "reset search");
                 myWidget.displayData(myWidget.dataFull);
             },
 
@@ -62,16 +68,20 @@ function executeWidgetCode() {
 					data: dataWAF,
 					type: "json",
 					onComplete: function(dataResp) {
+						console.log("RASHID" + dataResp.msg);
 						if (dataResp.msg === "OK") {
+							console.log("RASHID" + "ok");
 							myWidget.dataFull = dataResp.data;
 							myWidget.displayData(myWidget.dataFull);
 						} else {
+							console.log("RASHID" + "error in webservice response");
 							widget.body.innerHTML += "<p>Error in WebService Response</p>";
 							widget.body.innerHTML += "<p>" + JSON.stringify(dataResp) + "</p>";
 						}
 					},
 					onFailure: function(error) {
-						widget.body.innerHTML += "<p>Call Faillure</p>";
+						console.log("RASHID call failure " + JSON.stringify(error));
+						widget.body.innerHTML += "<p>Call Failure</p>";
 						widget.body.innerHTML += "<p>" + JSON.stringify(error) + "</p>";
 					}
                 });
